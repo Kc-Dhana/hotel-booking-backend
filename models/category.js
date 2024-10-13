@@ -7,13 +7,21 @@ const categorySchema =mongoose.Schema(
             required :true,
             unique :true
         },
+        price : {
+            type : Number,
+            required :true
+        },
+        features :[         //Strings array ekak vdiyata save wenwa. feature godak denna pulwaun
+            {
+                type:String,
+            }
+        ],
         description: {
             type : String,
             required : true
         },
-        price : {
-            type : Number,
-            required :true
+        Image :{
+            type :String
         }
     
     }
