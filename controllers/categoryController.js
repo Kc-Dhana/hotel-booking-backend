@@ -33,3 +33,19 @@ export function createCategory(req,res){
         }
     )
 }
+export function viewCategory(req,res){
+    Category.find().then(
+        (result)=>{
+            res.json({
+                categories : result 
+            })
+        }
+
+    ).catch(
+        ()=>{
+            res.son({
+                message : "Failed to get categories"
+            })
+        }
+    )
+}
