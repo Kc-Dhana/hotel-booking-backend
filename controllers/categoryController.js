@@ -13,7 +13,7 @@ export function createCategory(req,res){
     if(user.type != "admin"){
         
         res.status(403).json({
-            message:"you dont have permmission to add create category"
+           message:"you dont have permmission to add create category"
         })
         return
     }
