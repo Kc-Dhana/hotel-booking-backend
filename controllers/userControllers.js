@@ -1,6 +1,8 @@
 import User from "../models/user.js"
 import jwt from 'jsonwebtoken' //jwt athuentication (token)
 import bcrpty from  'bcrypt'
+import dotenv from 'dotenv'
+dotenv.config()
 
 //create user
 export function postUsers(req,res){     //export danne me method eka wena file ekn import karanna.
@@ -62,7 +64,7 @@ export function loginUser(req,res){
                 };
 
                 // sign the token with the paylaid and secret
-                const token =jwt.sign(payload, "secret",{ expiresIn: "48h"});
+                const token =jwt.sign(payload,process.env.JWT_KEY,{ expiresIn: "48h"});
 
                 res.json({
                     message : "User found",
