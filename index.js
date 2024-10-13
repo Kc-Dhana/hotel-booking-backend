@@ -4,6 +4,7 @@ import usersRouter from './routes/usersRoute.js' //import karanwa
 import mongoose from 'mongoose'
 import galleryItemRouter from './routes/galleryItemRoute.js'
 import jwt from 'jsonwebtoken'
+import categoryRouter from './routes/category.Route.js'
 
 
 const app = express()
@@ -14,20 +15,20 @@ const connectionString = "mongodb+srv://tester2:321@cluster0.ms79i.mongodb.net/?
 
 //midelware karanne req kohen hari enawa nam e req eka aran mona hari wenasak karala processing ekak karala elaga kenwata yawanwa
 
-app.use((req,res,next)=>{  // Authentication middelwere ekak(bodypaser wage but meka api hadanne)
+app.use((req,res,next)=>{                                               // Authentication middelwere ekak(bodypaser wage but meka api hadanne)
 
-    const token = req.header("Authorization")?.replace("Bearer ", "") //ena token eka save karagannwa, token eka enne req header ekem
-                                                                    //req.header("Authorization")req heder eke,autherixation eke monama hari 
-                                                                    //tiyenwadaw check karawa
-                                                                    //? tiyenwa nam bearer eke tiyene eka token variable ekata aran denewa
+    const token = req.header("Authorization")?.replace("Bearer ", "")   //ena token eka save karagannwa, token eka enne req header ekem
+                                                                        //req.header("Authorization")req heder eke,autherixation eke monama hari 
+                                                                        //tiyenwadaw check karawa
+                                                                        //? tiyenwa nam bearer eke tiyene eka token variable ekata aran denewa
   
-    if(token != null){    //token tiyena ekak da kiyala balanwa
-      jwt.verify(token,"secret", //secret passs + token dala balnwa verfiwenawa nam pahala functioneka run wenna one
-        (err,decoded)=>{  //decode karaddi error awada, nattma decode unada kiyala balanwa
-        if(decoded != null){  //decode una nam
-          req.user = decoded  //req usewa dala yawanwa. next req ekat(userwa gatte apu token eka decode karala)
+    if(token != null){                          //token tiyena ekak da kiyala balanwa
+      jwt.verify(token,"secret",                //secret passs + token dala balnwa verfiwenawa nam pahala functioneka run wenna one
+        (err,decoded)=>{                        //decode karaddi error awada, nattma decode unada kiyala balanwa
+        if(decoded != null){                    //decode una nam
+          req.user = decoded                    //req usewa dala yawanwa. next req ekat(userwa gatte apu token eka decode karala)
           next()
-        }else{          //error awoth
+        }else{                                  //error awoth
           next()
         }
   
@@ -49,11 +50,13 @@ mongoose.connect(connectionString).then(     //use mogoose to connect db.
     )
 )
 
-app.use("/api/users",usersRouter) //userRouter.js eke routes tika use karanwa "/users" dala
-                                //use api for best paratice
-                                //req eketh(postman)add weenna one api kiyala
-
+app.use("/api/users",usersRouter)           //userRouter.js eke routes tika use karanwa "/users" dala.use api for best paratice,req eketh(postman)add weenna one api kiyala
+                              
 app.use("/api/gallery",galleryItemRouter)
+
+app.use("/api/category",categoryRouter)
+
+
 
 app.listen(5000,(req,res)=>{
  console.log("Sever is running on port 5000")
