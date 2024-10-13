@@ -1,0 +1,35 @@
+import Category from "../models/category.js"
+
+export function createCategory(req,res){
+
+    const user= req.user
+    if(user ==null)
+    {
+        res.status(403).json({
+            message :"Please login to create a gallery item"
+        })
+        return
+    }
+    if(user.type != "admin"){
+        
+        res.status(403).json({
+            message:"you dont have permmission to add create category"
+        })
+        return
+    }
+
+    const newCategory = new Category(req.body)
+    newCategory.save().then(
+        ()=>{
+            res.json({
+                message: "Category created successfully"
+            })
+        }
+    ).catch(
+        ()=>{
+            res.json({
+                message:"Category creation failed"
+            })
+        }
+    )
+}
