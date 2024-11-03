@@ -11,7 +11,7 @@ const categorySchema =mongoose.Schema(
             type : Number,
             required :true
         },
-        features :[         //Strings array ekak vdiyata save wenwa. feature godak denna pulwaun
+        features :[         //Strings array ekak vdiyata save wenwa. feature godak denna pulwaun..
             {
                 type:String,
             }
