@@ -6,6 +6,7 @@ import galleryItemRouter from './routes/galleryItemRoute.js'
 import jwt from 'jsonwebtoken'
 import categoryRouter from './routes/categoryRoute.js'
 import dotenv from 'dotenv'
+import roomRouter from './routes/roomRoom.js'
 
 dotenv.config()
 
@@ -58,6 +59,8 @@ app.use("/api/users",usersRouter)           //userRouter.js eke routes tika use 
 app.use("/api/gallery",galleryItemRouter)
 
 app.use("/api/category",categoryRouter)
+
+app.use("/api/rooms",roomRouter)
 
 
 

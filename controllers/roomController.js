@@ -134,3 +134,25 @@ export function updateRoom(req, res) {
         }
     )
 }
+export function getRoomsByCategory(req, res) {
+    const category = req.params.category
+    Room.find({category:category}).then(
+        (result) => {
+            res.json(
+                {
+                message: "Rooms found",
+                result: result
+                }
+             )
+        }
+    ).catch(
+        (err) => {
+            res.json(
+                {
+                message: "Failed to get rooms",
+                error: err
+                }
+             )  
+        }
+    )    
+}
