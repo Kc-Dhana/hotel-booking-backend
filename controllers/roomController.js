@@ -29,3 +29,30 @@ export function createRooms(req, res) {
         }
     )
 }
+export function deleteRoom(req, res) {
+    if(!isAdminValid(req)){     //admin faluse nam if eke code run wenwa .isAdminValid methode eke usercontroller eken
+        res.status(403).json({
+            message:"Unauthorized"
+        })
+        return
+       }
+    const roomId = req.params.roomId
+    Room.findoneAndDelete({roomId:roomId}).then(
+        () => {
+            res.json(
+                {
+                message: "Room deleted successfully",
+                }
+             )
+        }
+    ).catch(
+        (err) => {
+            res.json(
+                {
+                message: "Room deletion failed",
+                error: err
+                }
+             )  
+        }
+    )
+}
