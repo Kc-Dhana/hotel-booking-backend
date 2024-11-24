@@ -37,7 +37,7 @@ export function deleteRoom(req, res) {
         return
        }
     const roomId = req.params.roomId
-    Room.findoneAndDelete({roomId:roomId}).then(
+    Room.findOneAndDelete({roomId:roomId}).then(
         () => {
             res.json(
                 {
@@ -89,12 +89,18 @@ export function findRoomById(req, res) {
 export function getRooms(req, res) {
     Room.find().then(
         (result) => {
-            res.json(
-                {
-                message: "Rooms found",
-                result: result
-                }
-             )
+            if (result.length === 0) {
+                // No rooms found
+                res.status(404).json({
+                    message: "No rooms found",
+                });
+            } else {
+                // Rooms found
+                res.json({
+                    message: "Rooms found",
+                    result: result,
+                });
+            }
         }
     ).catch(
         (err) => {
