@@ -76,3 +76,14 @@ export function loginUser(req,res){
     });
 
 }
+
+export function isAdminValid(req) {     //same code use karanwa nam eka funtion ekek vidyata dala awasha thanadi call karanwa. coding standedards
+    if(req.user == null){               
+        return false
+      }
+    if(req.user.type != "admin"){
+      
+        return false
+      }
+      return true;
+}

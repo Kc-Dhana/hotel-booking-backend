@@ -1,4 +1,5 @@
 import Category from "../models/category.js"
+import { isAdminValid } from "./userControllers.js"
 
 export function createCategory(req,res){
 
@@ -109,7 +110,7 @@ export function getCategoryByName(req,res){
 }
 export function updateCategory(req,res){
 
-   if(!isAdminValid(req)){     //admin faluse nam if eke code run wenwa
+   if(!isAdminValid(req)){     //admin faluse nam if eke code run wenwa .isAdminValid methode eke usercontroller eken
     res.status(403).json({
         message:"Unauthorized"
     })
@@ -132,13 +133,3 @@ export function updateCategory(req,res){
     )
 }
 
-function isAdminValid(req) {     //same code use karanwa nam eka funtion ekek vidyata dala awasha thanadi call karanwa. coding standedards
-    if(req.user == null){               
-        return false
-      }
-    if(req.user.type != "admin"){
-      
-        return false
-      }
-      return true;
-}
