@@ -107,3 +107,44 @@ export function getCategoryByName(req,res){
         }
     )
 }
+export function updateCategory(req,res){
+
+    if(req.user == null){
+        res.status(401).json({
+          message : "Unauthorized"
+        })
+        return
+      }
+      if(req.user.type != "admin"){
+        res.status(403).json({
+          message : "Forbidden"
+        })
+        return
+      }
+
+    const name = req.params.name;
+    Category.findOneAndUpdate({name:name},req.body).then(
+        ()=>{
+            res.json({
+                message:"Category updated successfully"
+            })
+        }
+    ).catch(
+        ()=>{
+            res.json({
+                message:"Failed to update category"
+            })
+        }
+    )
+}
+
+function isAdminValid(req) {     //same code use karanwa nam eka funtion ekek vidyata dala awasha thanadi call karanwa. coding standedards
+    if(req.user == null){               
+        return false
+      }
+    if(req.user.type != "admin"){
+      
+        return false
+      }
+      return true;
+}
