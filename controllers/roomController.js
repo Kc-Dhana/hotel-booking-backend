@@ -107,3 +107,30 @@ export function getRooms(req, res) {
         }
     )
 }
+export function updateRoom(req, res) {
+    if(!isAdminValid(req)){     //admin faluse nam if eke code run wenwa .isAdminValid methode eke usercontroller eken
+        res.status(403).json({
+            message:"Unauthorized"
+        })
+        return
+       }
+    const roomId = req.params.roomId
+    Room.findOneAndUpdate({roomId:roomId},req.body).then(
+        () => {
+            res.json(
+                {
+                message: "Room updated successfully",
+                }
+             )
+        }
+    ).catch(
+        (err) => {
+            res.json(
+                {            
+                message: "Room update failed", 
+                error: err  
+                }     
+             )  
+        }
+    )
+}
