@@ -109,21 +109,15 @@ export function getCategoryByName(req,res){
 }
 export function updateCategory(req,res){
 
-    if(req.user == null){
-        res.status(401).json({
-          message : "Unauthorized"
-        })
-        return
-      }
-      if(req.user.type != "admin"){
-        res.status(403).json({
-          message : "Forbidden"
-        })
-        return
-      }
+   if(!isAdminValid(req)){     //admin faluse nam if eke code run wenwa
+    res.status(403).json({
+        message:"Unauthorized"
+    })
+    return
+   }
 
-    const name = req.params.name;
-    Category.findOneAndUpdate({name:name},req.body).then(
+    const name = req.params.name; //req eke url ekeke apu nama variable ekata gannwa
+    Category.findOneAndUpdate({name:name},req.body).then( //req eke body eka update karanwa
         ()=>{
             res.json({
                 message:"Category updated successfully"
