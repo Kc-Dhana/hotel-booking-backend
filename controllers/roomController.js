@@ -56,3 +56,33 @@ export function deleteRoom(req, res) {
         }
     )
 }
+export function findRoomById(req, res) {
+    const roomId = req.params.roomId
+    Room.findOne({roomId:roomId}).then(
+        (result) => {
+            if(result == null){
+                res.status(404).json({
+                    message: "Room not found"
+                })
+                return
+            }else{
+                res.json(
+                    {
+                    message: "Room found",
+                    result: result
+                    }
+                 )
+            }
+        
+        }
+    ).catch(
+        (err) => {
+            res.json(
+                {
+                message: "Room search failed",
+                error: err
+                }
+             )  
+        }
+    )
+}
