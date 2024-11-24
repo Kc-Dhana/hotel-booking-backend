@@ -6,7 +6,7 @@ const bookingSchema =mongoose.Schema({
         required : true,
         unique : true
     },
-    roomID:{
+    roomId:{
         type : Number,
         required : true
     },
@@ -23,17 +23,21 @@ const bookingSchema =mongoose.Schema({
         type : String,
         default: ""
     },
-    startDate : {
+    start : {
         type : Date,
         required : true
     },
-    endDate : {
+    end : {
         type : Date,
         required : true
     },
     notes : {
         type : String,
         default: ""
+    },
+    timestamp :{
+        type : Date,
+        default : Date.now
     }
 
 })
