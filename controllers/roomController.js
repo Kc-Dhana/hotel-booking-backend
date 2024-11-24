@@ -8,7 +8,7 @@ export function createRooms(req, res) {
         })
         return
        }
-    const newRoom = newRoom(req.body)
+    const newRoom = new Room(req.body)
     newRoom.save().then(
         (result) => {
             res.json(
@@ -115,24 +115,47 @@ export function updateRoom(req, res) {
         return
        }
     const roomId = req.params.roomId
-    Room.findOneAndUpdate({roomId:roomId},req.body).then(
-        () => {
-            res.json(
-                {
-                message: "Room updated successfully",
-                }
-             )
-        }
-    ).catch(
-        (err) => {
-            res.json(
-                {            
-                message: "Room update failed", 
-                error: err  
-                }     
-             )  
-        }
-    )
+
+    //code give by chatgpt
+    Room.findOneAndUpdate({ roomId: roomId }, req.body, { new: true }) // `new: true` returns the updated document
+        .then((updatedRoom) => {
+            if (!updatedRoom) {
+                // No room was found with the given roomId
+                res.status(404).json({
+                    message: "Room not found",
+                });
+            } else {
+                // Room was successfully updated
+                res.json({
+                    message: "Room updated successfully",
+                    room: updatedRoom,
+                });
+            }
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the update
+            res.status(500).json({
+                message: "Room update failed",
+                error: error.message,
+            });
+        });
+    // Room.findOneAndUpdate({roomId:roomId},req.body).then(
+    //     () => {
+    //         res.json(
+    //             {
+    //             message: "Room updated successfully",
+    //             }
+    //          )
+    //     }
+    // ).catch(
+    //     () => {
+    //         res.json(
+    //             {            
+    //             message: "Room update failed", 
+    //             }     
+    //          )  
+    //     }
+    // )
 }
 export function getRoomsByCategory(req, res) {
     const category = req.params.category
