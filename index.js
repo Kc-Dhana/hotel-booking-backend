@@ -4,7 +4,7 @@ import usersRouter from './routes/usersRoute.js' //import karanwa
 import mongoose from 'mongoose'
 import galleryItemRouter from './routes/galleryItemRoute.js'
 import jwt from 'jsonwebtoken'
-import categoryRouter from './routes/category.Route.js'
+import categoryRouter from './routes/categoryRoute.js'
 import dotenv from 'dotenv'
 
 dotenv.config()
