@@ -86,3 +86,24 @@ export function findRoomById(req, res) {
         }
     )
 }
+export function getRooms(req, res) {
+    Room.find().then(
+        (result) => {
+            res.json(
+                {
+                message: "Rooms found",
+                result: result
+                }
+             )
+        }
+    ).catch(
+        (err) => {
+            res.json(
+                {
+                message: "Room search failed",
+                error: err
+                }
+             )  
+        }
+    )
+}
