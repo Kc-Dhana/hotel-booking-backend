@@ -59,7 +59,7 @@ export function loginUser(req,res){
                     id: user._id,           //(payload+secret password=token(meaning less words and numbers))
                     email: user.email,
                     firstName: user.firstName,
-                    lastName: user.lastname,
+                    lastName: user.lastName,
                     type: user.type,
                 };
 
@@ -96,4 +96,20 @@ export function isCustomerValid(req) {     //same code use karanwa nam eka funti
         return false
       }
       return true;
+}
+export function getUser(req,res){   
+    const user = req.body.user;
+    console.log(user);
+    if(user == null){
+       res.json({
+           message : "not found"
+       })
+    }
+    else{
+        res.json({
+            message : "found",
+            user : user
+        })
+    }
+    
 }
