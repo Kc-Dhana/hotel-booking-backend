@@ -7,7 +7,7 @@ export function createCategory(req,res){
     if(user ==null)
     {
         res.status(403).json({
-            message :"Please login to create a gallery item"
+            message :"Please login to create a category"
         })
         return
     }
