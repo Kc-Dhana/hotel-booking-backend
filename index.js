@@ -34,8 +34,8 @@ app.use((req,res,next)=>{                                               // Authe
       jwt.verify(token,process.env.JWT_KEY,                //secret passs + token dala balnwa verfiwenawa nam pahala functioneka run wenna one
         (err,decoded)=>{                        //decode karaddi error awada, nattma decode unada kiyala balanwa
         if(decoded != null){                    //decode una nam
-          req.body.user = decoded                    //req usewa dala yawanwa. next req ekat(userwa gatte apu token eka decode karala)
-          next()
+          req.user = decoded                    //req usewa dala yawanwa. next req ekat(userwa gatte apu token eka decode karala)
+          next()                  //remove .body.user
         }else{                                  //error awoth
           next()
         }
