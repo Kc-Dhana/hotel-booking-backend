@@ -49,3 +49,28 @@ export function createBooking(req,res){
     )
 
 }
+export default function getAllBookings(req,res){
+    Booking.find().then(
+        (result) => {
+            res.json({
+                message : "Bookings found",
+                result : result
+            });
+        }
+    ).catch(
+        (err) => {
+            res.json({
+                message : "Failed to get bookings",
+                error : err
+            });
+        }
+    )
+}
+
+//post req ekka create karanne json data dala yawanana one nisa
+export function retriveBookingByDate(req,res){
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+    console.log(startDate);
+    console.log(endDate);
+}
