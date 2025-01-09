@@ -69,8 +69,30 @@ export default function getAllBookings(req,res){
 
 //post req ekka create karanne json data dala yawanana one nisa
 export function retriveBookingByDate(req,res){
-    const startDate = req.body.startDate;
-    const endDate = req.body.endDate;
-    console.log(startDate);
-    console.log(endDate);
+    const start = req.body.start;
+    const end = req.body.end;
+    console.log(start);
+    console.log(end);
+
+    Booking.find({      //db operation
+        start:{         //gte greater than or equal
+            $gte : new Date(start), //starting date ekata wada wadi wenna one(req(fronend)eka dec o1 and data shoud 1 or 2 like wise)
+        },
+        end : {         //lte less than or equal
+            $lte : new Date(end)  //end date ekata wada adu wenna one(req dec 31 and data shoud 31 or 30 like that)
+        }
+    }).then(
+        (result) => {
+           res.json({
+               message : "Filtered bookings",
+               result : result
+           });
+        }
+    ).catch((err) => {
+            res.json({
+                message : "Failed to get Filtered bookings",
+                error : err
+            });
+        }
+    )
 }
