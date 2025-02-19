@@ -2,6 +2,9 @@ import User from "../models/user.js"
 import jwt from 'jsonwebtoken' //jwt athuentication (token)
 import bcrpty from  'bcrypt'
 import dotenv from 'dotenv'
+import nodemailer from 'nodemailer';       
+import Otp from "../models/otp.js";
+import e from "express";
 dotenv.config()
 
 //create user
@@ -19,9 +22,20 @@ export function postUsers(req,res){     //export danne me method eka wena file e
     newUser.save().then(           //new userwa db eke save karanna
 
         ()=>{
-            res.json({
-                message : "User Created Succesfully"
+            //generate random number 1000-9999
+            const otp = Math.floor( 1000 + Math.random() * 9000);
+
+            const newOtp = new Otp({
+                email : req.body.email,
+                otp : otp
             })
+            newOtp.save().then(()=>{                           //otp eka save karanaw db eke
+                    sendOtpEmail(user.email,otp);          //save unata passe email eka yawanwa
+                    res.json({                                    //okkoma hari nam meh json eka yanwa
+                        message : "User Created Succesfully"
+                    });
+                }
+            )
         }
     ).catch(
         ()=>{
@@ -112,4 +126,64 @@ export function getUser(req,res){
         })
     }
     
+}
+export function sendOtpEmail(email,otp){
+    
+                                                        //nodemailer ekai google account ekai connete karanne transporter eken
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.PASSWORD
+        }
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,              //avilla tiyena email ekata thama yawanne
+        subject: 'Validating OTP',
+        text: 'Your OTP is: ' + otp
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){            //meken thama mail eka send karanne
+        if (error) {
+          console.log(error);
+        
+        } else {
+          console.log(info);
+          
+        }
+      });
+}
+export function verifyUserEmail(req,res){
+   
+    const otp = req.body.otp;
+    const email = req.body.email;
+
+    Otp.find({email : email}).sort({date : -1}).then((otpList)=>{        //anithimata apu otp eka hoyanwa
+        if(otpList.length == 0){          //otp list eke lenghth eka balanwa
+            res.json({
+                message : "OTP is invalid"
+            });
+        }else{
+            const latestOtp = otpList[0];   //otp list eke otp eka ekata latest otp ekata gannwa
+            if(latestOtp.otp == otp){
+                User.findOneAndUpdate({email : email},{emailVerified : true}).then(()=>{            //otp hari nam user attribute emailverified eka true karnwa
+                    res.json({
+                        message : "User email verified successfully"
+                    });
+                });
+            }else{
+                res.json({
+                    message : "OTP is invalid"
+                });
+            }
+        
+        }
+
+    })
 }
