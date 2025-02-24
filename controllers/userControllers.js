@@ -127,6 +127,46 @@ export function getUser(req,res){
     }
     
 }
+export function getAllUsers(req, res) {
+    // Validate admin
+    if (!isAdminValid(req)) {
+        res.status(403).json({
+            message: "Forbidden"
+        });
+        return;
+    }
+
+    // Get pagination parameters from request query
+    const page = parseInt(req.body.page) || 1; // Default to page 1
+    const pageSize = parseInt(req.body.pageSize) || 10; // Default to 10 users per page
+    const skip = (page - 1) * pageSize; // Calculate number of documents to skip
+
+    User.find()
+        .skip(skip)
+        .limit(pageSize)
+        .then((users) => {
+            // Count total users
+            User.countDocuments().then((totalCount) => {
+                res.json({
+                    message: "Users found",
+                    users: users,
+                    pagination: {
+                        currentPage: page,
+                        pageSize: pageSize,
+                        totalUsers: totalCount,
+                        totalPages: Math.ceil(totalCount / pageSize),   //math.ceil kiyanne dashama sankayawak asanna uda agayata watayanwa (5.3=6)
+                    },
+                });
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: "Error fetching users",
+                error: err,
+            });
+        });
+}
+
 export function sendOtpEmail(email,otp){
     
                                                         //nodemailer ekai google account ekai connete karanne transporter eken
