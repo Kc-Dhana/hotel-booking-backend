@@ -21,7 +21,8 @@ const categorySchema =mongoose.Schema(
             required : true
         },
         Image :{
-            type :String
+            type :String,
+            required : true
         }
     
     }
