@@ -46,7 +46,7 @@ export function viewCategory(req,res){
 
     ).catch(
         ()=>{
-            res.son({
+            res.json({
                 message : "Failed to get categories"
             })
         }
