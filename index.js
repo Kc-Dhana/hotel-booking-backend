@@ -8,7 +8,9 @@ import categoryRouter from './routes/categoryRoute.js'
 import dotenv from 'dotenv'
 import roomRouter from './routes/roomRoom.js'
 import bookingRouter from './routes/bookingRoute.js'
+import feedbackRouter from './routes/feedbackRoute.js'
 import cors from 'cors'
+
 
 dotenv.config()
 
@@ -67,6 +69,8 @@ app.use("/api/category",categoryRouter)
 app.use("/api/rooms",roomRouter)
 
 app.use("/api/bookings",bookingRouter)
+
+app.use("/api/feedback",feedbackRouter)
 
 
 

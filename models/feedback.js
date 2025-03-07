@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const feedbackSchema = new mongoose.Schema(
+const feedbackSchema = mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,   // Stores a reference (ID) to another document
