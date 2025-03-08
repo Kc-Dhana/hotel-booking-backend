@@ -41,6 +41,10 @@ const userSchema =mongoose.Schema( //userge stucter eka
             type : Boolean,
             required : true,
             default : false
+        },
+        image : {
+            type : String,
+            //required : true
         }
 
     }
