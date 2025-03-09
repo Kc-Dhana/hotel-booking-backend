@@ -1,5 +1,5 @@
 import Feedback from "../models/feedback.js";
-import { isCustomerValid } from "./userControllers.js";
+import { isAdminValid, isCustomerValid } from "./userControllers.js";
 
 
 export  function createFeedback(req, res){
@@ -28,7 +28,7 @@ export  function createFeedback(req, res){
 // Get all approved feedback for public view
 export function getFeedbacks(req, res) {
     try {
-        Feedback.find({ approved: true })
+        Feedback.find({ approved: false })
         .populate('user', 'firstName lastName image email')
             .then((feedbacks) => {
                 res.status(200).json({ feedbacks });
@@ -43,28 +43,36 @@ export function getFeedbacks(req, res) {
     }
 }
 
-// // Admin approve feedback
-// export function approveFeedback(req, res) {
-//     try {
-//         const { feedbackId } = req.params;
+// Admin approve feedback
+export function approveFeedback(req, res) {
+    try {
+        if (!isAdminValid(req)) { 
+            res.status(403).json({
+                message: "Forbidden",
+            });
+            return;
+        }
 
-//         Feedback.findByIdAndUpdate(feedbackId, { approved: true }, { new: true })
-//             .then((updatedFeedback) => {
-//                 if (!updatedFeedback) {
-//                     return res.status(404).json({ message: "Feedback not found" });
-//                 }
+        const { feedbackId } = req.params;
 
-//                 res.status(200).json({ message: "Feedback approved", feedback: updatedFeedback });
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 res.status(500).json({ message: "Error approving feedback" });
-//             });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Error approving feedback" });
-//     }
-// }
+        Feedback.findByIdAndUpdate(feedbackId, { approved: true }, { new: true })
+            .then((updatedFeedback) => {
+                if (!updatedFeedback) {
+                    return res.status(404).json({ message: "Feedback not found" });
+                }
+
+                res.status(200).json({ message: "Feedback approved", feedback: updatedFeedback });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ message: "Error approving feedback" });
+            });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error approving feedback" });
+    }
+}
+
 
 // // Get feedback for admin (including unapproved ones)
 // export function getAdminFeedbacks(req, res) {
