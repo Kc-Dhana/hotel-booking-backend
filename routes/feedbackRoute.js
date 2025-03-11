@@ -1,5 +1,5 @@
 import express from "express";
-import { approveFeedback, createFeedback, getFeedbacks } from "../controllers/feedbackController.js";
+import { approveFeedback, createFeedback, getAdminFeedbacks, getFeedbacks } from "../controllers/feedbackController.js";
 
 const feedbackRouter = express.Router();
 
@@ -13,6 +13,6 @@ feedbackRouter.get("/", getFeedbacks);
 feedbackRouter.put("/approve/:feedbackId", approveFeedback);
 
 // // Get all feedbacks (for admin, including unapproved ones)
-// feedbackRouter.get("/admin", getAdminFeedbacks);
+feedbackRouter.get("/admin", getAdminFeedbacks);
 
 export default feedbackRouter;

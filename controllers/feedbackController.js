@@ -28,7 +28,7 @@ export  function createFeedback(req, res){
 // Get all approved feedback for public view
 export function getFeedbacks(req, res) {
     try {
-        Feedback.find({ approved: false })
+        Feedback.find({ approved: true })
         .populate('user', 'firstName lastName image email')
             .then((feedbacks) => {
                 res.status(200).json({ feedbacks });
@@ -74,23 +74,29 @@ export function approveFeedback(req, res) {
 }
 
 
-// // Get feedback for admin (including unapproved ones)
-// export function getAdminFeedbacks(req, res) {
-//     try {
-//         Feedback.find()
-//             .populate('user', 'name image email')
-//             .then((feedbacks) => {
-//                 res.status(200).json({ feedbacks });
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 res.status(500).json({ message: "Error retrieving admin feedbacks" });
-//             });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Error retrieving admin feedbacks" });
-//     }
-// }
+// Get feedback for admin (including unapproved ones)
+export function getAdminFeedbacks(req, res) {
+    try {
+        if (!isAdminValid(req)) { 
+            res.status(403).json({
+                message: "Forbidden",
+            });
+            return;
+        }
+        Feedback.find()
+            .populate('user', 'name image email')
+            .then((feedbacks) => {
+                res.status(200).json({ feedbacks });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ message: "Error retrieving admin feedbacks" });
+            });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving admin feedbacks" });
+    }
+}
 
 // // Get feedback for the logged-in customer
 // export function getUserFeedback(req, res) {
