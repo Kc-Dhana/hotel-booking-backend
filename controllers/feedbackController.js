@@ -29,7 +29,7 @@ export  function createFeedback(req, res){
 export function getFeedbacks(req, res) {
     try {
         Feedback.find({ approved: true })
-        .populate('user', 'firstName lastName image email')
+        .populate('user', 'firstName lastName email image')
             .then((feedbacks) => {
                 res.status(200).json({ feedbacks });
             })
