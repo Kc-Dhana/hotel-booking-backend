@@ -99,20 +99,26 @@ export function getAdminFeedbacks(req, res) {
 }
 
 // // Get feedback for the logged-in customer
-// export function getUserFeedback(req, res) {
-//     try {
-//         const userId = req.user.id;  // Assuming the user ID is available via the auth middleware
+export function getUserFeedback(req, res) {
+    try {
+        if(!isCustomerValid(req)){
+            res.status(403).json({
+                message: "Forbidden",
+              });
+              return;
+        }
+        const userId = req.user.id;  //user ID is available via the auth middleware
 
-//         Feedback.find({ user: userId })
-//             .then((feedbacks) => {
-//                 res.status(200).json({ feedbacks });
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 res.status(500).json({ message: "Error retrieving your feedback" });
-//             });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Error retrieving your feedback" });
-//     }
-// }
+        Feedback.find({ user: userId })
+            .then((feedbacks) => {
+                res.status(200).json({ feedbacks });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ message: "Error retrieving your feedback" });
+            });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving your feedback" });
+    }
+}
