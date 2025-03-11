@@ -72,6 +72,32 @@ export function approveFeedback(req, res) {
         res.status(500).json({ message: "Error approving feedback" });
     }
 }
+//admin unapprove feedback
+export function unapproveFeedback(req, res) {
+    try {
+        if (!isAdminValid(req)) { 
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        const { feedbackId } = req.params;
+
+        Feedback.findByIdAndUpdate(feedbackId, { approved: false }, { new: true })
+            .then((updatedFeedback) => {
+                if (!updatedFeedback) {
+                    return res.status(404).json({ message: "Feedback not found" });
+                }
+
+                res.status(200).json({ message: "Feedback unapproved", feedback: updatedFeedback });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ message: "Error unapproving feedback" });
+            });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error unapproving feedback" });
+    }
+}
 
 
 // Get feedback for admin (including unapproved ones)
@@ -84,7 +110,7 @@ export function getAdminFeedbacks(req, res) {
             return;
         }
         Feedback.find()
-            .populate('user', 'name image email')
+            .populate('user', 'firstName lastName email')
             .then((feedbacks) => {
                 res.status(200).json({ feedbacks });
             })
