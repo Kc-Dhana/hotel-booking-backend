@@ -8,7 +8,7 @@ const galleryItemSchema =mongoose.Schema(
         },
         image : {
             type : String,
-            //required : true
+            required : true
         },
         description : {
             type : String,
