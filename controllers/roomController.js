@@ -185,3 +185,18 @@ export function getRoomsByCategory(req, res) {
         }
     )    
 }
+export function searchRooms(req, res) {
+    const { roomId, category } = req.query;
+
+    const filter = {};
+    if (roomId) filter.roomId = roomId;
+    if (category) filter.category = category;
+
+    Room.find(filter)
+        .then(result => {
+            res.json({ message: "Rooms found", result });
+        })
+        .catch(error => {
+            res.status(500).json({ message: "Search failed", error });
+        });
+}
