@@ -33,6 +33,10 @@ const roomSchema =mongoose.Schema({
     notes : {
         type : String,                  //passe mona hari chage unoth meka wenas kara ganna punwan nisa developeta lesi wenna
         default:""
+    },
+    price: {
+        type: Number,
+        required: true,
     }
 })
 
