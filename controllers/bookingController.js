@@ -181,3 +181,44 @@ export function createBookingUsingCategory(req,res){
       })                         
     })
 }
+
+// Controller function to get available rooms based on date range and category
+export async function getAvailableRooms(req, res) {
+  try {
+    // Extract search parameters from the query string
+    const { start, end, category } = req.query;
+
+    // Convert string dates to Date objects
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    // Find bookings that overlap with the given date range
+    // Overlap logic: a booking starts before the search end and ends after the search start
+    const overlappingBookings = await Booking.find({
+      $or: [
+        {
+          start: { $lt: endDate },
+          end: { $gt: startDate },
+        },
+      ],
+    });
+
+    // Extract the room IDs from overlapping bookings
+    const bookedRoomIds = overlappingBookings.map(b => b.roomId);
+
+    // Find rooms that are NOT in the list of booked room IDs and match the selected category
+    const availableRooms = await Room.find({
+      roomId: { $nin: bookedRoomIds }, // Exclude booked rooms
+      category: category,              // Match the selected category
+    });
+
+    // Send available rooms back to the client
+    res.json(availableRooms);
+  } catch (err) {
+    // Handle any errors and send error response
+    res.status(500).json({
+      message: "Error fetching available rooms",
+      error: err.message
+    });
+  }
+}
