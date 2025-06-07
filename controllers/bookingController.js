@@ -273,3 +273,34 @@ export function createBulkBooking(req, res) {
       });
     });
 }
+export function getBookingsByStatusForCustomer(req, res) {
+  if (!isCustomerValid(req)) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  const customerEmail = req.user.email; // from decoded JWT
+
+  // Optional query parameter to filter by status
+  const { status } = req.query;
+
+  // Build query
+  const query = { email: customerEmail };
+  if (status) {
+    query.status = status;
+  }
+
+  Booking.find(query)
+    .then((result) => {
+      res.json({
+        message: "Bookings retrieved successfully",
+        result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Error fetching bookings",
+        error: err,
+      });
+    });
+}
+
