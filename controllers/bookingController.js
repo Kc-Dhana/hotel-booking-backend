@@ -303,4 +303,33 @@ export function getBookingsByStatusForCustomer(req, res) {
       });
     });
 }
+// Update booking by ID
+export const updateBooking = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
 
+  try {
+    const updatedBooking = await Booking.findByIdAndUpdate(id, updateData, { new: true });
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    res.json(updatedBooking);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update booking", error: error.message });
+  }
+};
+
+// Delete booking by ID
+export const deleteBooking = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedBooking = await Booking.findByIdAndDelete(id);
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    res.json({ message: "Booking deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete booking", error: error.message });
+  }
+};
