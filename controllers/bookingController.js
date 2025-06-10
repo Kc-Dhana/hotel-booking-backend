@@ -104,20 +104,23 @@ export function createBookingUsingCategory(req,res){
     const end = new Date(req.body.end);
 
     Booking.find({
-        $or :[        //condition 2k danawa. 2ken 1k hari giyath booked room ekka viyata ganne
-            {
-            start : {  //database eke start eka
-                $gte :start,               //cutomer dena eka //starting data eke kalin booking wala staring and end date atahra tiyenwada balanwa.
-                $lt :end                   //2ken 1k hari giyath booked room ekka viyata ganne
-                }
-            },
-            { 
-            end : {
-                $gte :start,
-                $lt :end
-                }
-            }
-        ]
+        // $or :[        //condition 2k danawa. 2ken 1k hari giyath booked room ekka viyata ganne
+        //     {
+        //     start : {  //database eke start eka
+        //         $gte :start,               //cutomer dena eka //starting data eke kalin booking wala staring and end date atahra tiyenwada balanwa.
+        //         $lt :end                   //2ken 1k hari giyath booked room ekka viyata ganne
+        //         }
+        //     },
+        //     { 
+        //     end : {
+        //         $gte :start,
+        //         $lt :end
+        //         }
+        //     }
+        // ]
+        start: { $lt: end },
+        end: { $gt: start }
+
     }).then((response)=>{
       const overlappingBookings = response;
       const rooms = [];
@@ -129,7 +132,8 @@ export function createBookingUsingCategory(req,res){
 
       Room.find({                                //Room model eka import  karanna mulinma
         roomId : {                                              
-            $in: rooms                            //rooms array eke(bookedroomid) nathi ithuru rooom id ganna vidiya
+            // $in: rooms                            //rooms array eke(bookedroomid) nathi ithuru rooom id ganna vidiya
+            $nin: rooms
         },
         category : req.body.category              //e ena room id eken awashana categorye eke ewa vitharl filter karanwa 
       }).then((room)=>{
