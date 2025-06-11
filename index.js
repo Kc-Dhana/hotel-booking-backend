@@ -60,6 +60,9 @@ mongoose.connect(connectionString).then(     //use mogoose to connect db.
     )
 )
 
+app.get("/", (req, res) => res.send("Server is running"));// Add healthcheck route here
+
+
 app.use("/api/users",usersRouter)           //userRouter.js eke routes tika use karanwa "/users" dala.use api for best paratice,req eketh(postman)add weenna one api kiyala
                               
 app.use("/api/gallery",galleryItemRouter)
