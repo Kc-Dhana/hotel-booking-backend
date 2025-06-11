@@ -14,7 +14,7 @@ usersRouter.post("/all",getAllUsers)
 
 usersRouter.post("/verify-email",verifyUserEmail)
 
-//usersRouter.post("/email",sendOtpEmail)
+usersRouter.post("/email",sendOtpEmail)
 
 export default usersRouter; //export karanwa ethokta index.js eken 
                             //import kara ganna puluwan
